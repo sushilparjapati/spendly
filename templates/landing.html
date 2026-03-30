@@ -30,7 +30,7 @@
 
         <div class="lp-cta-row">
             <a href="{{ url_for('register') }}" class="lp-btn">Create free account</a>
-            <a href="#" class="lp-btn">See how it works</a>
+            <a href="#" class="lp-btn" id="open-demo-modal">See how it works</a>
         </div>
 
         <div class="lp-preview">
@@ -111,4 +111,61 @@
     </div>
 </section>
 
+<!-- Video modal -->
+<div id="demo-modal" class="lp-modal" aria-hidden="true">
+    <div class="lp-modal-overlay"></div>
+    <div class="lp-modal-box" role="dialog" aria-label="Demo video">
+        <button class="lp-modal-close" aria-label="Close">&times;</button>
+        <div class="lp-modal-video">
+            <iframe
+                id="demo-iframe"
+                src=""
+                data-src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1"
+                title="Spendly demo"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const modal    = document.getElementById('demo-modal');
+    const iframe   = document.getElementById('demo-iframe');
+    const trigger  = document.getElementById('open-demo-modal');
+    const overlay  = modal.querySelector('.lp-modal-overlay');
+    const closeBtn = modal.querySelector('.lp-modal-close');
+
+    function openModal() {
+        iframe.src = iframe.dataset.src;
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        iframe.src = '';
+    }
+
+    trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        openModal();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+            closeModal();
+        }
+    });
+}());
+</script>
 {% endblock %}
